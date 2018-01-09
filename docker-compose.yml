@@ -1,0 +1,16 @@
+version: '2'
+
+services:
+
+ feedcollector:
+  image: ruby:slim
+  container_name: feedcollector
+  volumes:
+    - data:/data
+    - ./:/app
+  working_dir: "/app"
+  entrypoint: ruby
+  command: "/app/feedcollector.rb -f config-docker.yml"
+
+volumes:
+  data:

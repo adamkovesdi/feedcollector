@@ -45,8 +45,7 @@ class Feed
     # returns time object of last update
     lastupdate = Time.new(1979, 1, 1)
     if File.file?(@lastupdatefile)
-      datestring = IO.read(File.join(File.dirname(__FILE__),
-                                     @lastupdatefile)).chomp
+      datestring = IO.read(@lastupdatefile).chomp
       lastupdate = Time.rfc2822(datestring)
     end
     lastupdate

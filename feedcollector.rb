@@ -85,6 +85,7 @@ class Feedcollector
 
   def initialize(config = CONFIGFILE)
     @outputlog = Logger.new(LOGDEVICE)
+    $stdout.sync = true
     @conf = FcConfig.new(config)
     @conf.createdirs
     @sleepinterval = @conf.sleepinterval
