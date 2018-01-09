@@ -1,5 +1,6 @@
 ---
 outputdir: "data"
+sleepinterval: 1800
 feeds:
   - name: health
     url: "http://feeds.bbci.co.uk/news/health/rss.xml"

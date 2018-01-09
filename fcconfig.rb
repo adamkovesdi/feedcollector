@@ -13,6 +13,10 @@ class FcConfig
     @config['feeds'].map { |f| f['name'] }
   end
 
+  def sleepinterval
+    @config['sleepinterval'].to_i
+  end
+
   def outputdir
     @config['outputdir']
   end

@@ -6,7 +6,6 @@ require './feedparser'
 require './fcconfig'
 require './feed'
 
-SLEEPTIME = 1800
 CONFIGFILE = 'config.yml'.freeze
 LOGDEVICE = STDOUT
 # LOGDEVICE = 'feedcollector.log'
@@ -15,6 +14,7 @@ DAEMONOUT = '/tmp/feedcollectorout.txt'.freeze
 # main class
 class Feedcollector
   attr_reader :feeds
+  attr_reader :sleepinterval
 
   def log(text)
     @outputlog.info(text)
@@ -47,10 +47,10 @@ class Feedcollector
   end
 
   def cyclic_feedparse
-    log("Starting feed collection, sleep interval #{SLEEPTIME}")
+    log("Starting feed collection, sleep interval #{sleepinterval}")
     loop do
       doallfeeds
-      sleep(SLEEPTIME)
+      sleep(sleepinterval)
     end
   end
 
@@ -85,6 +85,13 @@ class Feedcollector
     @outputlog = Logger.new(LOGDEVICE)
     conf = FcConfig.new(CONFIGFILE)
     conf.createdirs
+    @sleepinterval = conf.sleepinterval
+    initfeeds(conf)
+  end
+
+  protected
+
+  def initfeeds(conf)
     @feeds = []
     conf.feeds.each do |f|
       newfeed = Feed.new(f, conf.url(f), conf.outputfile(f),
