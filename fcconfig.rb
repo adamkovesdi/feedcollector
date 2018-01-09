@@ -22,15 +22,23 @@ class FcConfig
   end
 
   def lastdatefile(feed)
-    outputdir + '/' + feed + "/#{LASTDATEFILE}"
+    "#{outputdir}/#{feed}/#{LASTDATEFILE}"
   end
 
   def outputfile(feed)
-    outputdir + '/' + feed + "/#{OUTPUTFILE}"
+    "#{outputdir}/#{feed}/#{OUTPUTFILE}"
+  end
+
+  def createdirs
+    Dir.mkdir(outputdir) unless File.directory?(outputdir)
+    feeds.each do |f|
+      target = "#{outputdir}/#{f}"
+      Dir.mkdir(target) unless File.directory?(target)
+    end
   end
 end
 
-conf = FC_Config.new('config.yml')
+conf = FcConfig.new('config.yml')
 puts conf.feeds.inspect
 puts conf.url('health')
-puts conf.outputfile('health')
+puts conf.lastdatefile('health')
