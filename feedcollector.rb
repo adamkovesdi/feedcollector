@@ -3,31 +3,20 @@
 # Feed collector application by Adam Kovesdi (c) 2017
 require 'logger'
 require 'optparse'
+require './logfacility'
 require './feedparser'
 require './fcconfig'
 require './feed'
 
 CONFIGFILE = 'config.yml'.freeze
-LOGDEVICE = STDOUT
-# LOGDEVICE = 'feedcollector.log'
 DAEMONOUT = '/tmp/feedcollectorout.txt'.freeze
 
 # main class
 class Feedcollector
+  include Logfacility
+
   attr_reader :feeds
   attr_reader :sleepinterval
-
-  def log(text)
-    @outputlog.info(text)
-  end
-
-  def error(text)
-    @outputlog.error(text)
-  end
-
-  def fatal(text)
-    @outputlog.fatal(text)
-  end
 
   def dofeed(feed)
     entries = Feedparser.parsefeed(feed.url)
@@ -63,7 +52,7 @@ class Feedcollector
   end
 
   def daemon
-    @outputlog = Logger.new('feedcollector.log')
+    @logdevice = 'feedcollector.log'
     $stdin.reopen('/dev/null')
     $stdout.reopen(DAEMONOUT, 'a')
     $stderr.reopen(DAEMONOUT, 'a')
@@ -84,8 +73,7 @@ class Feedcollector
   end
 
   def initialize(config = CONFIGFILE)
-    @outputlog = Logger.new(LOGDEVICE)
-    $stdout.sync = true
+    # $stdout.sync = true
     @conf = FcConfig.new(config)
     @conf.createdirs
     @sleepinterval = @conf.sleepinterval
