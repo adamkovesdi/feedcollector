@@ -109,4 +109,5 @@ end.parse!
 
 options[:configfile] ||= CONFIGFILE
 fc = Feedcollector.new(options[:configfile])
+$stdout.sync = true
 fc.interactive
