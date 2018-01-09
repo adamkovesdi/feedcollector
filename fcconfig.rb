@@ -13,12 +13,12 @@ class FcConfig
     @config['feeds'].map { |f| f['name'] }
   end
 
-  def url(name)
-    @config['feeds'].select { |h| h['name'] == name }[0]['url']
-  end
-
   def outputdir
     @config['outputdir']
+  end
+
+  def url(name)
+    @config['feeds'].select { |h| h['name'] == name }[0]['url']
   end
 
   def lastdatefile(feed)
@@ -37,8 +37,3 @@ class FcConfig
     end
   end
 end
-
-conf = FcConfig.new('config.yml')
-puts conf.feeds.inspect
-puts conf.url('health')
-puts conf.lastdatefile('health')
