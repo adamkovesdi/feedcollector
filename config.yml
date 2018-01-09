@@ -1,0 +1,19 @@
+---
+outputdir: "data"
+feeds:
+  - name: health
+    url: "http://feeds.bbci.co.uk/news/health/rss.xml"
+  - name: entertainment_arts
+    url: "http://feeds.bbci.co.uk/news/entertainment_and_arts/rss.xml"
+  - name: politics
+    url: "http://feeds.bbci.co.uk/news/politics/rss.xml"
+  - name: science_environment
+    url: "http://feeds.bbci.co.uk/news/science_and_environment/rss.xml"
+  - name: technology
+    url: "http://feeds.bbci.co.uk/news/technology/rss.xml"
+  - name: business
+    url: "http://feeds.bbci.co.uk/news/business/rss.xml"
+  - name: education
+    url: "http://feeds.bbci.co.uk/news/education/rss.xml"
+  - name: football
+    url: "http://feeds.bbci.co.uk/sport/football/rss.xml?edition=int"
