@@ -7,7 +7,7 @@ services:
   container_name: feedcollector
   volumes:
     - data:/data
-    - ./:/app
+    - ./:/app:ro
   working_dir: "/app"
   entrypoint: ruby
   command: "/app/feedcollector.rb -f config-docker.yml"
