@@ -3,7 +3,8 @@ require 'yaml'
 LASTDATEFILE = 'lastdate.txt'.freeze
 OUTPUTFILE = 'output.txt'.freeze
 
-class FC_Config
+# Configuration for feedcollector
+class FcConfig
   def initialize(file)
     @config = YAML.load_file(file)
   end
@@ -28,3 +29,8 @@ class FC_Config
     outputdir + '/' + feed + "/#{OUTPUTFILE}"
   end
 end
+
+conf = FC_Config.new('config.yml')
+puts conf.feeds.inspect
+puts conf.url('health')
+puts conf.outputfile('health')
