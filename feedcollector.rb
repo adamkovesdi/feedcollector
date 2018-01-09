@@ -2,6 +2,7 @@
 #
 # Feed collector application by Adam Kovesdi (c) 2017
 require 'logger'
+require 'optparse'
 require './feedparser'
 require './fcconfig'
 require './feed'
@@ -62,6 +63,7 @@ class Feedcollector
   end
 
   def daemon
+    @outputlog = Logger.new('feedcollector.log')
     $stdin.reopen('/dev/null')
     $stdout.reopen(DAEMONOUT, 'a')
     $stderr.reopen(DAEMONOUT, 'a')
@@ -81,25 +83,41 @@ class Feedcollector
     Process.detach pid
   end
 
-  def initialize
+  def initialize(config = CONFIGFILE)
     @outputlog = Logger.new(LOGDEVICE)
-    conf = FcConfig.new(CONFIGFILE)
-    conf.createdirs
-    @sleepinterval = conf.sleepinterval
-    initfeeds(conf)
+    @conf = FcConfig.new(config)
+    @conf.createdirs
+    @sleepinterval = @conf.sleepinterval
+    initfeeds
   end
 
   protected
 
-  def initfeeds(conf)
+  def initfeeds
     @feeds = []
-    conf.feeds.each do |f|
-      newfeed = Feed.new(f, conf.url(f), conf.outputfile(f),
-                         conf.lastdatefile(f))
+    @conf.feeds.each do |f|
+      newfeed = Feed.new(f, @conf.url(f), @conf.outputfile(f),
+                         @conf.lastdatefile(f))
       @feeds.push(newfeed)
     end
   end
 end
 
-fc = Feedcollector.new
+# Main program
+# option parser
+options = {}
+OptionParser.new do |opts|
+  opts.banner = 'Usage: feedcollector.rb [options]'
+  opts.on('-fCONFIGFILE', '--configfile=CONFIGFILE',
+          'YAML Configuration file') do |f|
+    options[:configfile] = f
+  end
+  opts.on('-h', '--help', 'Prints this help') do
+    puts opts
+    exit
+  end
+end.parse!
+
+options[:configfile] ||= CONFIGFILE
+fc = Feedcollector.new(options[:configfile])
 fc.interactive
