@@ -10,6 +10,7 @@ require './feed'
 
 CONFIGFILE = 'config.yml'.freeze
 DAEMONOUT = '/tmp/feedcollectorout.txt'.freeze
+THROTTLE = 60
 
 # main class
 class Feedcollector
@@ -45,6 +46,8 @@ class Feedcollector
   end
 
   def interactive
+    log("Throttling #{THROTTLE} seconds")
+    sleep(THROTTLE)
     cyclic_feedparse
   rescue Interrupt
     fatal('Stopping on interrupt')
